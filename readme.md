@@ -541,12 +541,12 @@ mv app.py __init__.py
 
 ### 5. Item Catalog source modifications for production
 
-#### 1. Remove debugging settings from __init__.py
+#### 1. Remove debugging settings from `__init__.py`
 
 * Open `__init__.py`
 
 ```
-sudo nano __init.py__
+sudo nano __init__.py
 ```
 
 * Remove the application's debugging settings in the end and replace with `app.run()`
