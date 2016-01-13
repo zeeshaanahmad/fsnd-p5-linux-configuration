@@ -28,6 +28,7 @@ This project requires to configure and secure a Linux virtual machine on Amazon 
   ssh -i ~/.ssh/udacity_key.rsa root@52.25.36.89
   ```
   NOTE: Use the public key for root which is provided by Udacity. Key was downloaded and stored in `~/.ssh`.
+
 ## 2. User Management
 1. Create user named `grader`
 ```
