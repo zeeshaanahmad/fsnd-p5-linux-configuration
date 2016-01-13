@@ -175,6 +175,8 @@ adduser grader
 
   6. **Monitor unsuccessful login attempts**
 
+    *Source: [How To Protect SSH with Fail2Ban on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-14-04)*
+
     To implement monitoring of unsuccessful login attempts, fail2ban can be installed and configured.
     * Install fail2ban
 
