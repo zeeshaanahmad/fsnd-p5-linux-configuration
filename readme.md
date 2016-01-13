@@ -181,6 +181,54 @@ adduser grader
   keep the local version currently installed
   ```
 
+## 5. Apache Web Server
+Apache web server will be used to host out item catalog web application. It will be installed and configured to serve python mod_wsgi application.
+
+*Source: [A Step by Step Guide to Install LAMP (Linux, Apache, MySQL, Python) on Ubuntu](http://blog.udacity.com/2015/03/step-by-step-guide-install-lamp-linux-apache-mysql-python-ubuntu.html)*
+
+### 1. Install apache2
+Install apache web server using following command.
+```
+sudo apt-get install apache2
+```
+
+### 2. Install dependencies
+`mod_wsgi` ensures Apache and python work together. So we need to install this.
+```
+sudo apt-get install python-setuptools libapache2-mod-wsgi
+```
+
+Restart `apache2` service for `mod_wsgi` to load.
+```
+sudo service apache2 restart
+```
+
+**At this point, the apache is up and running on the remote VM. It can be checked by loading this url in browser. [http://ec2-52-25-36-89.us-west-2.compute.amazonaws.com/](http://ec2-52-25-36-89.us-west-2.compute.amazonaws.com/)**
+
+## 6. PostgreSQL
+
+*Source: [How To Install and Use PostgreSQL on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04)*
+
+### 1. Install postgresql
+Run following command to install PostgreSQL
+```
+sudo apt-get install postgresql postgresql-contrib
+```
+
+### 2. Add new user
+Switch to `postgres` user. This user is created by default with the installation of PostgreSQL.
+```
+su -i -u postgres
+```
+
+Create a new user named `catalog` for PostgreSQL database for our Item Catalog Application
+```
+createuser -P catalog
+```
+It will prompt for password because of -P switch. User will be created with limited permissions.
+
+
+
 # Softwares Installed
 ## apache2
 ```
