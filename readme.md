@@ -227,6 +227,46 @@ createuser -P catalog
 ```
 It will prompt for password because of -P switch. User will be created with limited permissions.
 
+### 3. Secure postgres
+
+*Source:[How To Secure PostgreSQL on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps)*
+
+Make sure PostgreSQL does not allow remote connections. PostgreSQL is set to disable remote connections by default and it can be verfied as below.
+* Open `/etc/postgresql/9.3/main/pg_hba.conf` and check that the entries should look like this.
+```
+local   all             postgres                                peer
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+"local" is for Unix domain socket connections only
+local   all             all                                     peer
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            md5
+# IPv6 local connections:
+host    all             all             ::1/128                 md5
+```
+
+*As the host type entries have values 127.0.0.1/32 and ::1/128, this ensures the remotes connection are disabled.*
+
+## 7. git
+In order to serve existing Item Catalog application, it needs to be cloned on Linux VM machine from [github](https://github.com/zeeshaanahmad/fsnd-p3-itemcatalog). git needs to be installed to access github and clone the application source.
+
+### 1. Install git
+* Run following command to install git
+```
+sudo apt-get install git
+```
+
+### 2. Clone Item Catalog
+* Go to `/var/www/` and create a folder `itemcatalog`
+```
+cd /var/www/
+mkdir itemcatalog
+cd itemcatalog
+sudo git clone https://github.com/zeeshaanahmad/fsnd-p3-itemcatalog.git itemcatalog
+```
+*This will copy the itemcatalog source to `/var/www/itemcatalog/itemcatalog`*
+
+## 8. Hosting application
 
 
 # Softwares Installed
