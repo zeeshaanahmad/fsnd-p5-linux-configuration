@@ -229,10 +229,11 @@ It will prompt for password because of -P switch. User will be created with limi
 
 ### 3. Secure postgres
 
-*Source:[How To Secure PostgreSQL on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps)*
+*Source: [How To Secure PostgreSQL on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps)*
 
-Make sure PostgreSQL does not allow remote connections. PostgreSQL is set to disable remote connections by default and it can be verfied as below.
+Make sure PostgreSQL does not allow remote connections. PostgreSQL is set to disable remote connections by default and it can be verified as below.
 * Open `/etc/postgresql/9.3/main/pg_hba.conf` and check that the entries should look like this.
+
 ```
 local   all             postgres                                peer
 
@@ -268,16 +269,198 @@ sudo git clone https://github.com/zeeshaanahmad/fsnd-p3-itemcatalog.git itemcata
 
 ## 8. Hosting application
 
+*Source: [How To Deploy a Flask Application on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)*
 
-# Softwares Installed
-## apache2
+### 1. Enable `mod_wsgi`
+Run following command to enable `mod_wsgi`
+
 ```
-sudo apt-get install apache2
-```
-## PostgreSQL
-```
-sudo apt-get install postgresql postgresql-contrib
+sudo a2enmod wsgi
 ```
 
+### 2. Virtual Environment
+Setting up a virtual environment will keep the application and its dependencies isolated from the main system. Changes to it will not affect the cloud server's system configurations.
+
+Go to `/var/www/itemcatalog/itemcatalog`
+
+#### Install `pip`
+`pip` is needed to install `virtualenv` and `Flask`. So first install `pip` using `apt-get`.
+
+```
+sudo apt-get install python-pip
+```
+
+#### 2. Install `virtualenv`
+Using `pip`, install `virtualenv`
+
+```
+sudo pip install virtualenv
+```
+
+#### 3. Create Virtual Environment
+create virtual environment using `virtualenv` with name `venev`.
+
+```
+sudo virtualenv venv
+```
+
+#### 4. Activate Virtual Environment
+Activate the virtual environment
+
+```
+source venv/bin/activate
+```
+
+### 3. Install Flask within Virtual Environment
+Install `Flask` using `pip`
+
+```
+sudo pip install Flask
+```
+
+### 4. Apache Virtual Host Configuration
+
+#### 1. Create new Virtual Host
+
+* Create a file in /etc/apache2/sites-available/ with the name of itemcatalog.conf
+This will hold the configuration for Virtual Host pointing towards item catalog application.
+
+```
+sudo nano /etc/apache2/itemcatalog.conf
+```
+
+* Insert the following lines in this file
+
+```
+<VirtualHost *:80>
+      ServerName 52.25.36.89
+      ServerAdmin admin@52.25.36.89
+      WSGIScriptAlias / /var/www/itemcatalog/itemcatalog.wsgi
+      <Directory /var/www/itemcatalog/itemcatalog/>
+          Order allow,deny
+          Allow from all
+      </Directory>
+      Alias /static /var/www/itemcatalog/itemcatalog/static
+      <Directory /var/www/itemcatalog/itemcatalog/static/>
+          Order allow,deny
+          Allow from all
+      </Directory>
+      ErrorLog ${APACHE_LOG_DIR}/error.log
+      LogLevel warn
+      CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+* Save and Exit
+
+#### 2. Create `.wsgi` file
+
+* Go to `/var/www/itemcatalog`
+* Create a file named `itemcatalog.wsgi`
+
+```
+sudo nano itemcatalog.wsgi
+```
+
+* Add following python code in this file
+
+```
+#!/usr/bin/python
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/itemcatalog")
+
+from itemcatalog import app as application
+#from itemcatalog import app as application
+application.secret_key = 'super_secret_key'
+```
+
+* Save and Exit
+* Go to `/var/www/itemcatalog/itemcatalog`
+
+```
+cd /var/www/itemcatalog/itemcatalog
+```
+
+* Rename /var/www/itemcatalog/itemcatalog/app.py to /var/www/itemcatalog/itemcatalog/__init__.py
+
+```
+mv app.py __init__.py
+```
+
+### 5. Item Catalog source modifications for production
+
+#### 1. Remove debugging settings from __init__.py
+
+* Open __init__.py
+
+```
+sudo nano __init.py__
+```
+
+* Remove the application's debugging settings in the end and replace with `app.run()`
+Replace this section
+
+```
+if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
+    app.debug = True
+    app.run(host='0.0.0.0', port=5000)
+```
+
+With
+
+```
+if __name__ == '__main__':
+    app.run()
+```
+
+#### 2. Update database connection string
+Update database connection string in create_engine method call in __init__.py, db_setup.py, populate_item_categories.py files. This will switch the database to PostgreSQL instead of previously configured sqlite.
+Replace this line
+
+```
+engine = create_engine('sqlite:///itemcatalogwithusers.db')
+```
+
+With
+
+```
+engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
+```
+
+#### 3. Change server address in JS file
+Replace the address used in REST calls  i.e. `localhost:5000` with `ec2-52-25-36-89.us-west-2.compute.amazonaws.com`
+
+## 9. Configuration for Google+/Facebook Sign in
+### Google Sign in
+* Login to `console.developers.google.com` and select the previously created project for item catalog
+* Go to API Manager > credentials
+* Pick the entry for previously configured OAuth 2.0 client ID from table
+* Add `http://ec2-52-25-36-89.us-west-2.compute.amazonaws.com` to Authorized JavaScript Origins
+* Add `http://ec2-52-25-36-89.us-west-2.compute.amazonaws.com/oauth2callback` to Authorized redirect URIs
+* Save Changes
+
+### Facebook Sign in
+* Login to `developers.facebook.com` and select the previously created project for item catalog
+* Go to settings
+* Update the Site URL to `http://ec2-52-25-36-89.us-west-2.compute.amazonaws.com`
+* Save Changes
+
+## Just a few steps
+* Enable the site
+
+```
+sudo a2ensite itemcatalog
+```
+
+* Restart `apache2`
+
+```
+sudo service apache2 restart
+```
+
+# All Done! The Site is Up and Running!
 
 [1]: http://ec2-52-25-36-89.us-west-2.compute.amazonaws.com/
