@@ -146,7 +146,9 @@ adduser grader
     Port 2200
     Protocol 2
     ```
+
   4. Block root login and limit login to only `grader` user
+
     * Update the entry `PermitRootLogin` to `no`
     ```
     PermitRootLogin no
@@ -159,15 +161,88 @@ adduser grader
     * Save and Exit
     * Restart the SSH service to take effect
     * `exit` and login again using new port
+
     ```
     ssh grader@52.25.36.89 -i ~/.ssh/fsnd-grader -p 2200
     ```
+
   5. Update firewall to deny traffic on default ssh port 22
 
     ```
     sudo ufw deny 22
     sudo ufw deny 22/tcp
     ```
+
+  6. **Monitor unsuccessful login attempts**
+
+    To implement monitoring of unsuccessful login attempts, fail2ban can be installed and configured.
+    * Install fail2ban
+
+    ```
+    sudo apt-get install fail2ban
+    ```
+
+    * Copy the default config `/etc/fail2ban/jail.conf` to `/etc/fail2ban/jail.local`
+
+    ```
+    sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+    ```
+
+    * Edit the `jail.local` to override default configuration
+
+    ```
+    sudo nano /etc/fail2ban/jail.local
+    ```
+
+    * Make following changes to `jail.local`
+
+    ```
+    # This value is in seconds. It will block the client IP address for 30 minutes
+    bantime = 1800
+
+    ...
+
+    destemail = <Enter email address to recieve fail2ban notifications>
+
+    ...
+
+    # Set action to %(action_mwl)s to include log lines in the email alerts
+    action = %(action_mwl)s
+    ...    
+    ```
+
+    * Change SSH Port to 2200 from 22
+    Look for [ssh], and change the port to 2200
+
+    ```
+    [ssh]
+    ...
+    enabled = true
+    port = 2200
+    ...
+    ```
+
+    * Save and exit
+
+    * Install `sendmail`
+
+    ```
+    sudo apt-get install sendmail
+    ```
+
+    * Stop the `fail2ban` service
+
+    ```
+    sudo service fail2ban stop
+    ```
+
+    * Start the `fail2ban` service
+
+    ```
+    sudo service fail2ban start
+    ```
+
+    *Stopping and starting the service will let the new changes take effect.*
 
 ## 4. Update Installed Packages
   *Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security > Updating Available Package Lists](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089452)*
@@ -490,7 +565,7 @@ if __name__ == '__main__':
 ```
 
 #### 2. Update database connection string
-Update database connection string in create_engine method call in __init__.py, db_setup.py, populate_item_categories.py files. This will switch the database to PostgreSQL instead of previously configured sqlite.
+Update database connection string in create_engine method call in `__init__.py`, db_setup.py, populate_item_categories.py files. This will switch the database to PostgreSQL instead of previously configured sqlite.
 Replace this line
 
 ```
@@ -545,5 +620,19 @@ sudo service apache2 restart
 ```
 
 # All Done! The Site is Up and Running!
+
+## Monitoring
+Installed `Glances` for monitoring of web server
+
+```
+sudo apt-get install Glances
+```
+
+Launch Glances to monitor system
+
+```
+glances
+```
+![Glances](http://i.imgur.com/eo8BgaJ.png)
 
 [1]: http://ec2-52-25-36-89.us-west-2.compute.amazonaws.com/
