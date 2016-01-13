@@ -170,10 +170,12 @@ adduser grader
   sudo apt-get update
   sudo apt-get upgrade
   ```
+
   NOTE: If following message appears
   ```
   A new version of /boot/grub/menu.lst is available, but the version installed currently has been locally modified.
   ```
+
   Choose the second option,
   ```
   keep the local version currently installed
