@@ -162,6 +162,12 @@ adduser grader
     ```
     ssh grader@52.25.36.89 -i ~/.ssh/fsnd-grader -p 2200
     ```
+  5. Update firewall to deny traffic on default ssh port 22
+
+    ```
+    sudo ufw deny 22
+    sudo ufw deny 22/tcp
+    ```
 
 ## 4. Update Installed Packages
   *Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security > Updating Available Package Lists](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089452)*
@@ -179,6 +185,23 @@ adduser grader
   Choose the second option,
   ```
   keep the local version currently installed
+  ```
+
+  ### Automatic updates
+  *Source: [AutomaticSecurityUpdates](https://help.ubuntu.com/community/AutomaticSecurityUpdates)*
+
+  Use following commands to enable automatic updates
+
+  * Install unattended-upgrades
+
+  ```
+  sudo apt-get install unattended-upgrades
+  ```
+
+  * Enable auto updates
+
+  ```
+  sudo dpkg-reconfigure --priority=low unattended-upgrades
   ```
 
 ## 5. Apache Web Server
@@ -267,6 +290,17 @@ sudo git clone https://github.com/zeeshaanahmad/fsnd-p3-itemcatalog.git itemcata
 ```
 *This will copy the itemcatalog source to `/var/www/itemcatalog/itemcatalog`*
 
+### 3. Make Git web inaccessible
+
+*Source: [Make .git directory web inaccessible](http://stackoverflow.com/questions/6142437/make-git-directory-web-inaccessible)*
+
+Create a file named `.htaccess` in `/var/www/itemcatalog`
+Write this in `.htaccess`
+
+```
+RedirectMatch 404 /\.git
+```
+
 ## 8. Hosting application
 
 *Source: [How To Deploy a Flask Application on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)*
@@ -298,10 +332,11 @@ sudo pip install virtualenv
 ```
 
 #### 3. Create Virtual Environment
-create virtual environment using `virtualenv` with name `venev`.
+create virtual environment using `virtualenv` with name `venev` and modify permissions.
 
 ```
 sudo virtualenv venv
+sudo chmod -R 777 venv
 ```
 
 #### 4. Activate Virtual Environment
@@ -311,11 +346,49 @@ Activate the virtual environment
 source venv/bin/activate
 ```
 
-### 3. Install Flask within Virtual Environment
+### 3. Install dependencies within Virtual Environment
+
+#### Flask
 Install `Flask` using `pip`
 
 ```
 sudo pip install Flask
+```
+
+#### oauth2client.client
+Install `oauth2client.client` using `pip`
+
+```
+sudo pip install --upgrade oauth2client
+```
+
+#### httplib2
+
+Install `httplib2` using `pip`
+
+```
+sudo pip install httplib2
+```
+
+#### requests
+Install `requests` using `pip`
+
+```
+sudo pip install requests
+```
+
+#### SQLAlchemy
+Install `SQLAlchemy` using `pip`
+
+```
+sudo pip install sqlalchemy
+```
+
+#### python-psycopg2
+Install the `python-psycopg2` using `apt-get`
+
+```
+sudo apt-get install python-psycopg2
 ```
 
 ### 4. Apache Virtual Host Configuration
@@ -383,7 +456,7 @@ application.secret_key = 'super_secret_key'
 cd /var/www/itemcatalog/itemcatalog
 ```
 
-* Rename /var/www/itemcatalog/itemcatalog/app.py to /var/www/itemcatalog/itemcatalog/__init__.py
+* Rename `/var/www/itemcatalog/itemcatalog/app.py` to `/var/www/itemcatalog/itemcatalog/__init__.py`
 
 ```
 mv app.py __init__.py
@@ -393,7 +466,7 @@ mv app.py __init__.py
 
 #### 1. Remove debugging settings from __init__.py
 
-* Open __init__.py
+* Open `__init__.py`
 
 ```
 sudo nano __init.py__
@@ -432,6 +505,16 @@ engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
 
 #### 3. Change server address in JS file
 Replace the address used in REST calls  i.e. `localhost:5000` with `ec2-52-25-36-89.us-west-2.compute.amazonaws.com`
+
+#### 4. Permissions on uploads folder
+Give permissions to all for writing and reading files from uploads directory.
+
+```
+sudo chmod -R 777 /var/www/itemcatalog/itemcatalog/static/uploads
+```
+
+#### 5. Use os.chdir() before reading client_secrets.json in `__init__.py`
+Add following line `os.chdir(r'/var/www/itemcatalog/itemcatalog')` before `CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']`. This will resolve the error of not being able to read client_secrets.json on server.
 
 ## 9. Configuration for Google+/Facebook Sign in
 ### Google Sign in
