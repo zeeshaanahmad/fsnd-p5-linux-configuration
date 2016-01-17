@@ -30,7 +30,9 @@ This project requires to configure and secure a Linux virtual machine on Amazon 
   NOTE: Use the public key for root which is provided by Udacity. Key was downloaded and stored in `~/.ssh`.
 
 ## 2. User Management
+
   *Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089468)*
+
 1. Create user named `grader`
 ```
 adduser grader
