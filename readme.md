@@ -51,6 +51,7 @@ adduser grader
   1. Enforce Key based authentication
 
     Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089477)
+    
     * Open another terminal on your local machine
     * Generate key pairs on local machine
     ```
