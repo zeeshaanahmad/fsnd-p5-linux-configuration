@@ -31,7 +31,7 @@ This project requires to configure and secure a Linux virtual machine on Amazon 
   
 ## 2. User Management
 
-  * Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089468)*
+  **Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089468)**
 
 1. Create user named `grader`
 ```
@@ -50,7 +50,7 @@ adduser grader
 ## 3. Security
   1. Enforce Key based authentication
 
-    * Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089477)*
+    **Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089477)**
     * Open another terminal on your local machine
     * Generate key pairs on local machine
     ```
@@ -103,7 +103,7 @@ adduser grader
 
   2. Configure UFW
 
-    * Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security > Configuring Ports in UFW](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089499)*
+    **Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security > Configuring Ports in UFW](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089499)**
     * First check the status of firewall if it is already active
     ```
     sudo ufw status
@@ -138,7 +138,7 @@ adduser grader
 
   3. Change SSH Port 22 to 2200, Limit login to `grader` user
 
-    * Source: [Initial Server Setup with Ubuntu 12.04](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-12-04)*
+    **Source: [Initial Server Setup with Ubuntu 12.04](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-12-04)**
     * Open `/etc/sshd_config`
     ```
     sudo nano /etc/sshd_config
@@ -177,7 +177,7 @@ adduser grader
 
   6. **Monitor unsuccessful login attempts**
 
-    * Source: [How To Protect SSH with Fail2Ban on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-14-04)*
+    **Source: [How To Protect SSH with Fail2Ban on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-14-04)**
 
     To implement monitoring of unsuccessful login attempts, fail2ban can be installed and configured.
     * Install fail2ban
@@ -249,7 +249,7 @@ adduser grader
     *Stopping and starting the service will let the new changes take effect.*
 
 ## 4. Update Installed Packages
-  * Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security > Updating Available Package Lists](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089452)*
+  **Source: [Udacity > Configuring Linux Web Servers > Lession 2: Linux Security > Updating Available Package Lists](https://www.udacity.com/course/viewer#!/c-ud299-nd/l-4331066009/m-4801089452)**
   * Update the installed packages using `apt-get`
   ```
   sudo apt-get update
@@ -267,7 +267,7 @@ adduser grader
   ```
 
   ### Automatic updates
-  * Source: [AutomaticSecurityUpdates](https://help.ubuntu.com/community/AutomaticSecurityUpdates)*
+  **Source: [AutomaticSecurityUpdates](https://help.ubuntu.com/community/AutomaticSecurityUpdates)**
 
   Use following commands to enable automatic updates
 
@@ -286,7 +286,7 @@ adduser grader
 ## 5. Apache Web Server
 Apache web server will be used to host out item catalog web application. It will be installed and configured to serve python mod_wsgi application.
 
-* Source: [A Step by Step Guide to Install LAMP (Linux, Apache, MySQL, Python) on Ubuntu](http://blog.udacity.com/2015/03/step-by-step-guide-install-lamp-linux-apache-mysql-python-ubuntu.html)*
+**Source: [A Step by Step Guide to Install LAMP (Linux, Apache, MySQL, Python) on Ubuntu](http://blog.udacity.com/2015/03/step-by-step-guide-install-lamp-linux-apache-mysql-python-ubuntu.html)**
 
 ### 1. Install apache2
 Install apache web server using following command.
@@ -309,7 +309,7 @@ sudo service apache2 restart
 
 ## 6. PostgreSQL
 
-* Source: [How To Install and Use PostgreSQL on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04)*
+**Source: [How To Install and Use PostgreSQL on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04)**
 
 ### 1. Install postgresql
 Run following command to install PostgreSQL
@@ -331,7 +331,7 @@ It will prompt for password because of -P switch. User will be created with limi
 
 ### 3. Secure postgres
 
-* Source: [How To Secure PostgreSQL on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps)*
+**Source: [How To Secure PostgreSQL on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps)**
 
 Make sure PostgreSQL does not allow remote connections. PostgreSQL is set to disable remote connections by default and it can be verified as below.
 * Open `/etc/postgresql/9.3/main/pg_hba.conf` and check that the entries should look like this.
@@ -371,7 +371,7 @@ sudo git clone https://github.com/zeeshaanahmad/fsnd-p3-itemcatalog.git itemcata
 
 ### 3. Make Git web inaccessible
 
-* Source: [Make .git directory web inaccessible](http://stackoverflow.com/questions/6142437/make-git-directory-web-inaccessible)*
+**Source: [Make .git directory web inaccessible](http://stackoverflow.com/questions/6142437/make-git-directory-web-inaccessible)**
 
 Create a file named `.htaccess` in `/var/www/itemcatalog`
 Write this in `.htaccess`
@@ -382,7 +382,7 @@ RedirectMatch 404 /\.git
 
 ## 8. Hosting application
 
-* Source: [How To Deploy a Flask Application on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)*
+**Source: [How To Deploy a Flask Application on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)**
 
 ### 1. Enable `mod_wsgi`
 Run following command to enable `mod_wsgi`
